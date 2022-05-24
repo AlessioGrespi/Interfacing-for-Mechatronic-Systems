@@ -40,6 +40,13 @@ int main(void)
 	}
 }
 
+void DACsetup()
+{
+	RCC->APB1ENR |= RCC_APB1ENR_DAC1EN; // enable APB1 clock
+	DAC1->CR |= DAC_CR_BOFF1; //disable buffer for DAC register
+	DAC1->CR |= DAC_CR_EN1; //enable DAC peripheral
+}
+
 void LEDupdate()
 {
 		encoderCount++;
@@ -68,7 +75,8 @@ void setupGPIOA()
 	GPIOA->MODER |= 0x00000000; // Set mode of each pin in port A
 	GPIOA->OTYPER &= ~(0x00000000); // Set output type for each pin required in Port A
 	GPIOA->PUPDR &= ~(0x00000000); // Set Pull up/Pull down resistor configuration for Port A
-	GPIOA->IDR |= 0x00000002;
+	//
+	//GPIOA->IDR |= 0x00000002;
 }
 
 // Delay function to occupy processor
