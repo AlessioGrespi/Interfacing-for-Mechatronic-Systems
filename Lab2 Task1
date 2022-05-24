@@ -75,4 +75,3 @@ TIM3->SR &= ~TIM_SR_UIF; // Reset ‘Update’ interrupt flag in the SR register
 
 
 
-
