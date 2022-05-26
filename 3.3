@@ -1,64 +1,37 @@
 #include "stm32f3xx.h" 
 
-void TIM3_IRQHandler(void);
 void LEDsetupGPIOE(void);
-void LEDtimerSetup(void);
-void GPIOAsetup(void);
-void DACsetup(void);
-void ADCsetup(void);
-void OpAmpStartUp(void);
-void ADCread(void);
-void PWMStartUp(void);
 void SysConfig(void);
 void EXTI0_IRQHandler(void);
 void EXTI1_IRQHandler(void);
 void EXTI1_TSC_IRQHandler(void);
 void LEDUpdate(void);
 
-int counter = 0;
-void delay(int a); // prototype for delay function
-unsigned int ADC1Value;
 int test = 0;
 int encoderCount = 0;
 		
 int main(void)
 {
 	LEDsetupGPIOE();
-	//LEDtimerSetup();
-	//GPIOAsetup();
-	//DACsetup();
-	//ADCsetup();
-	//OpAmpStartUp();
-	//PWMStartUp();
 	SysConfig();
-	
-	// ---------------------------- END OF STARTUP -----------------------
 
-		while (1)
-  {
-
-	}
+	while (1);
 }
 
-void DACsetup()
-{
-	RCC->APB1ENR |= RCC_APB1ENR_DAC1EN; // enable APB1 clock
-	DAC1->CR |= DAC_CR_BOFF1; //disable buffer for DAC register
-	DAC1->CR |= DAC_CR_EN1; //enable DAC peripheral
-}
+
 
 void LEDupdate()
 {
-		encoderCount++;
+	encoderCount++;
 	
-		GPIOE->BSRRH = (0xFC00); //set to off
+	GPIOE->BSRRH = (0xFC00); //set to off
 	
-		if (encoderCount == 16)
-		{
-			encoderCount = 0;
-		}
+	if (encoderCount == 16)
+	{
+		encoderCount = 0;
+	}
 		
-		GPIOE->BSRRL = encoderCount << 12; //11-14
+	GPIOE->BSRRL = encoderCount << 12; //11-14
 }
 
 void LEDsetupGPIOE()
@@ -68,31 +41,6 @@ void LEDsetupGPIOE()
 	GPIOE->OTYPER &= ~(0x00000000); // Set output type for each pin required in Port E
 	GPIOE->PUPDR &= ~(0xffff0000); // Set Pull up/Pull down resistor configuration for Port E
 }
-
-void setupGPIOA()
-{
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;	 // Enable clock on GPIO port A
-	GPIOA->MODER |= 0x00000000; // Set mode of each pin in port A
-	GPIOA->OTYPER &= ~(0x00000000); // Set output type for each pin required in Port A
-	GPIOA->PUPDR &= ~(0x00000000); // Set Pull up/Pull down resistor configuration for Port A
-	//
-	//GPIOA->IDR |= 0x00000002;
-}
-
-// Delay function to occupy processor
-void delay (int a)
-{
-		volatile int i,j;
-
-		for (i=0 ; i < a ; i++)
-		{
-				j++;
-		}
-
-		return;
-}
-
-
 
 void SysConfig()
 {
